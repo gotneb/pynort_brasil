@@ -1,5 +1,6 @@
 from selenium.webdriver import Firefox, FirefoxOptions
 from selenium.webdriver.common.by import By
+import wget
 
 
 def get_profile_metadata(driver: Firefox, url: str):
@@ -22,6 +23,7 @@ def get_profile_metadata(driver: Firefox, url: str):
     img = elem.get_attribute('src')
 
     print(f'Name: {name}\nImg: {img[:len(img)//2]}\nPosts: {posts} | Followers: {followers} | Following: {following}\nBio:\n{bio}')
+    wget.download(img, 'images/')
 
 
 def get_post_metadata(driver: Firefox, url: str):
