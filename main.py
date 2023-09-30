@@ -34,12 +34,15 @@ def get_post_metadata(driver: Firefox, url: str):
     # Comments
     elems = driver.find_elements(By.CSS_SELECTOR, 'ul._a9ym div.x1qjc9v5 li._a9zj._a9zl div._a9zm')
     for e in elems:
-        # Acontece porque quando nao ha likes, havera somente 'Reply' no comentario
-        likes = e.find_element(By.CSS_SELECTOR, 'button._a9ze span').text
-        if 'Reply' in likes:
+        try:
+            # Acontece porque quando nao ha likes, havera somente 'Reply' no comentario
+            likes = e.find_element(By.CSS_SELECTOR, 'button._a9ze span').text
+            if 'Reply' in likes:
+                likes = 0
+            else:
+                likes = int(likes.split(' ')[0])
+        except:
             likes = 0
-        else:
-            likes = int(likes.split(' ')[0])
 
         comentario = {
             'foto': e.find_element(By.CSS_SELECTOR, 'img').get_attribute('src')[:10],
@@ -53,14 +56,14 @@ def get_post_metadata(driver: Firefox, url: str):
 
 
 options = FirefoxOptions()
-# options.add_argument('-headless')
+#options.add_argument('-headless')
 driver = Firefox(options=options)
 
-# url_perfil = 'https://www.instagram.com/bbcbrasil/'
-# get_profile_metadata(driver, url_perfil)
+url_perfil = 'https://www.instagram.com/mundo.fisico/?img_index=1'
+get_profile_metadata(driver, url_perfil)
 
-url_post = 'https://www.instagram.com/p/CxGrAqgJoQX/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA=='
-get_post_metadata(driver, url_post)
+#url_post = 'https://www.instagram.com/p/CxzGr_4Oe97/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA=='
+#get_post_metadata(driver, url_post)
 
 input('Press any key to close...')
 driver.close()
