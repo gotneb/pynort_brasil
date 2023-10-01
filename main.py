@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 import wget
 
 
-def get_profile_metadata(driver: Firefox, url: str):
+def extrair_perfil(driver: Firefox, url: str):
     driver.get(url)
 
     driver.implicitly_wait(4)
@@ -13,8 +13,8 @@ def get_profile_metadata(driver: Firefox, url: str):
 
     elems = driver.find_elements(By.CSS_SELECTOR, 'section ul.x78zum5.x1q0g3np.xieb3on li span._ac2a span')
     posts = elems[0].text
-    followers = elems[1].text
-    following = elems[2].text
+    seguidores = elems[1].text
+    seguindo = elems[2].text
 
     elem = driver.find_element(By.CSS_SELECTOR, 'section div.x7a106z')
     bio = elem.text
@@ -22,11 +22,12 @@ def get_profile_metadata(driver: Firefox, url: str):
     elem = driver.find_element(By.CSS_SELECTOR, 'img.xpdipgo') # changed
     img = elem.get_attribute('src')
 
-    print(f'Name: {name}\nImg: {img[:len(img)//2]}\nPosts: {posts} | Followers: {followers} | Following: {following}\nBio:\n{bio}')
-    wget.download(img, 'images/')
+    print(f'Name: {name}\nImg: {img[:len(img)//2]}\nPosts: {posts} | Followers: {seguidores} | Following: {seguindo}\nBio:\n{bio}')
+    
+    wget.download(img, 'images/') # salva dentro da pasta `images`
 
 
-def get_post_metadata(driver: Firefox, url: str):
+def pegar_comentarios_post(driver: Firefox, url: str):
     driver.get(url)
     driver.implicitly_wait(7)
 
@@ -61,11 +62,11 @@ options = FirefoxOptions()
 #options.add_argument('-headless')
 driver = Firefox(options=options)
 
-url_perfil = 'https://www.instagram.com/mundo.fisico/?img_index=1'
-get_profile_metadata(driver, url_perfil)
+url_perfil = 'https://www.instagram.com/bbcbrasil/'
+extrair_perfil(driver, url_perfil)
 
 #url_post = 'https://www.instagram.com/p/CxzGr_4Oe97/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA=='
 #get_post_metadata(driver, url_post)
 
-input('Press any key to close...')
+input('\nAperte qualquer tecla para fechar...')
 driver.close()
